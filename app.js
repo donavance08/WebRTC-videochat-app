@@ -14,15 +14,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+let connectedPeers = [];
 /* 
     Make socket listen for connection event and inform the user
     print the socket.id afterwards
 */
 io.on('connection', (socket) => {
-    console.log('user connected to socket.IO server');
-    console.group(socket.id);
-})
+  console.log(`User ${socket.id} connected to the server`);
 
-app.listen(PORT, () => console.log(`Server is online on port ${PORT}`));
+  connectedPeers.push(socket);
 
+  socket.on('disconnect', () => {
+    console.log(`User ${socket.id} disconnected from the server`);
+  });
+});
 
+server.listen(PORT, () => console.log(`Server is online on port ${PORT}`));
