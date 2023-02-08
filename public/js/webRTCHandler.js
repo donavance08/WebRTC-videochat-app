@@ -61,5 +61,26 @@ const sendPreOfferAnswer = (preOfferAnswer) => {
     preOfferAnswer,
   };
 
+  ui.removeAllDialogs();
   wss.sendPreOfferAnswer(data);
+};
+
+export const handlePreOfferAnswer = (data) => {
+  ui.removeAllDialogs();
+  console.log('handlePreOfferAnswer called');
+  const { preOfferAnswer } = data;
+
+  switch (preOfferAnswer) {
+    case constants.preOfferAnswer.CALLEE_NOT_FOUND:
+      //show dialog that calle not found
+      break;
+    case constants.preOfferAnswer.CALL_UNAVAILABLE:
+      break;
+    case constants.preOfferAnswer.CALL_REJECTED:
+      console.log('webRTCHandler: case CALL_REJECTED');
+      break;
+    case constants.preOfferAnswer.CALL_ACCEPTED:
+      console.log('webRTCHandler: case CALL_ACCEPTED');
+      break;
+  }
 };

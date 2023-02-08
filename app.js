@@ -53,8 +53,17 @@ io.on('connection', (socket) => {
 
     const { callerSocketId, preOfferAnswer } = data;
 
-    console.log(`response from callee is ${preOfferAnswer}`)
+    console.log(`response from callee is ${preOfferAnswer}`);
 
+    const connectedPeer = connectedPeers.find((peerSocketId) => {
+      return peerSocketId === callerSocketId;
+    });
+
+    if (connectedPeer) {
+      console.log('found in list');
+      console.log(callerSocketId);
+      io.to(callerSocketId).emit('pre-offer-answer', data);
+    }
   });
 
   socket.on('disconnect', () => {
