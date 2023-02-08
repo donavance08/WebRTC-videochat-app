@@ -48,6 +48,15 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('pre-offer-answer', (data) => {
+    console.log('pre-offer-answer listener triggered');
+
+    const { callerSocketId, preOfferAnswer } = data;
+
+    console.log(`response from callee is ${preOfferAnswer}`)
+
+  });
+
   socket.on('disconnect', () => {
     console.log(`User ${socket.id} disconnected from the server`);
 
