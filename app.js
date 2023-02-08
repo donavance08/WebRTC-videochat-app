@@ -26,11 +26,15 @@ io.on('connection', (socket) => {
 
   printConnectedSockets(connectedPeers);
 
+  /* *
+   * Listen for pre-offer events comming from each client connected to this socket server and emit same event name to the destination socket.
+   */
   socket.on('pre-offer', (data) => {
-    const { personalCode, callType } = data;
+    console.log('server pre-offer listener triggered');
+    const { calleePersonalCode, callType } = data;
 
     const connectedPeer = connectedPeers.find((peerSocketId) => {
-      return peerSocketId === personalCode;
+      return peerSocketId === calleePersonalCode;
     });
 
     if (connectedPeer) {
@@ -40,7 +44,7 @@ io.on('connection', (socket) => {
         callType,
       };
 
-      io.to(personalCode).emit('pre-offer', data);
+      io.to(calleePersonalCode).emit('pre-offer', data);
     }
   });
 
