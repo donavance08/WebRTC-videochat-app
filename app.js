@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
   printConnectedSockets(connectedPeers);
 
   /* *
-   * Listen for pre-offer events comming from each client connected to this socket server and emit same event name to the destination socket.
+   * Listen for pre-offer events comming from each client connected to this socket server and emit same event name to the destination socket if found.
    */
   socket.on('pre-offer', (data) => {
     console.log('server pre-offer listener triggered');
@@ -39,12 +39,17 @@ io.on('connection', (socket) => {
 
     if (connectedPeer) {
       console.log('found in list');
-      const data = {
+      data = {
         callerSocketId: socket.id,
         callType,
       };
 
       io.to(calleePersonalCode).emit('pre-offer', data);
+    } else {
+      const data = {
+        preOfferAnswer: 'CALLEE_NOT_FOUND',
+      };
+      io.to(socket.id).emit('pre-offer-answer', data);
     }
   });
 

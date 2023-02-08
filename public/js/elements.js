@@ -96,3 +96,32 @@ export const getCallingDialog = (rejectCallHandler) => {
   hangUpCallButton.addEventListener('click', () => rejectCallHandler());
   return dialog;
 };
+
+export const getInfoDialog = (title, description) => {
+  const dialog = document.createElement('div');
+  dialog.classList.add('dialog_wrapper');
+  const dialogContent = document.createElement('div');
+  dialogContent.classList.add('dialog_content');
+  dialog.appendChild(dialogContent);
+
+  const dialogTitle = document.createElement('p');
+  dialogTitle.classList.add('dialog_title');
+  dialogTitle.innerHTML = title;
+
+  const imageContainer = document.createElement('div');
+  imageContainer.classList.add('dialog_image_container');
+  const image = document.createElement('img');
+  const avatarImagePath = './utils/images/dialogAvatar.png';
+  image.src = avatarImagePath;
+  imageContainer.appendChild(image);
+
+  const dialogDescription = document.createElement('p');
+  dialogDescription.classList.add('dialog_description');
+  dialogDescription.innerHTML = description;
+
+  dialogContent.appendChild(dialogTitle);
+  dialogContent.appendChild(imageContainer);
+  dialogContent.appendChild(dialogDescription);
+
+  return dialog;
+};
