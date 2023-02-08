@@ -4,6 +4,24 @@ import * as ui from './ui.js';
 
 let connectedUserDetails;
 
+const defaultConstraints = {
+  audio: true,
+  video: true,
+};
+
+export const getLocalPreview = () => {
+  navigator.mediaDevices
+    .getUserMedia(defaultConstraints)
+    .then((stream) => {
+      ui.updateLocalVideo(stream);
+      store.setLocalStream(stream);
+    })
+    .catch((error) => {
+      console.log('error occured whe trying to get access to camera');
+      console.log(error);
+    });
+};
+
 /**
  * determines if call or chat is for a stranger or a known contact and lets wss handle the preoffer event
  */
