@@ -1,6 +1,7 @@
 import * as wss from './wss.js';
 import * as constants from './constants.js';
 import * as ui from './ui.js';
+import * as store from './store.js';
 
 let connectedUserDetails;
 let peerConnection;
@@ -113,6 +114,7 @@ export const handlePreOffer = (data) => {
 
 const acceptCallHandler = () => {
   console.log('call accepted');
+  createPeerConnection();
   sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
 };
 const rejectCallHandler = () => {
@@ -154,8 +156,24 @@ export const handlePreOfferAnswer = (data) => {
       break;
 
     case constants.preOfferAnswer.CALL_ACCEPTED:
-      ui.showInfoDialog(preOfferAnswer);
       console.log('webRTCHandler: case CALL_ACCEPTED');
-      break;
+      ui.showVideoCallElements();
+      createPeerConnection();
+      sendWebRTCOffer();
   }
+};
+
+const sendWebRTCOffer = async () => {
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
+  wss.sendDataUsingWebRTCSignalling({
+    connectedUserSocketId: connectedUserDetails.socketId,
+    type: constants.webRTCSignalling.OFFER,
+    offer: offer,
+  });
+};
+
+export const handWebRTCOffer = (data) => {
+  console.log('webRTCHandler.webRTCOffer called');
+  console.log('data', data);
 };

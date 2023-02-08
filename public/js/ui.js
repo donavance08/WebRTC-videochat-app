@@ -17,6 +17,10 @@ export const updateLocalVideo = (stream) => {
   });
 };
 
+export const updateRemoteVideo = (stream) => {
+  console.log('ui.updateRemoteVideo called');
+};
+
 export const showIncomingCallDialog = (
   callType,
   acceptCallHandler,
@@ -92,8 +96,6 @@ export const showInfoDialog = (preOfferAnswer) => {
     setTimeout(() => {
       removeAllDialogs();
     }, 4000);
-  } else {
-    showVideoCallElements();
   }
 };
 
@@ -106,7 +108,7 @@ export const showChatCallElements = (callType) => {
   disableDashboard();
 };
 
-const showVideoCallElements = () => {
+export const showVideoCallElements = () => {
   const callButtons = document.getElementById('call_buttons');
   showElement(callButtons);
 
