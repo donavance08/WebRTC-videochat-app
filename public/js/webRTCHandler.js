@@ -3,12 +3,24 @@ import * as constants from './constants.js';
 import * as ui from './ui.js';
 
 let connectedUserDetails;
+let peerConnection;
 
 const defaultConstraints = {
   audio: true,
   video: true,
 };
 
+const configuration = {
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:13902',
+    },
+  ],
+};
+
+/**
+ * function to gain access to camera and microphone and preview it to the local_video container
+ */
 export const getLocalPreview = () => {
   navigator.mediaDevices
     .getUserMedia(defaultConstraints)
@@ -20,6 +32,43 @@ export const getLocalPreview = () => {
       console.log('error occured whe trying to get access to camera');
       console.log(error);
     });
+};
+
+const createPeerConnection = () => {
+  peerConnection = new RTCPeerConnection(configuration);
+
+  peerConnection.onicecandidate = (event) => {
+    console.log('getting ice candidates from stun server');
+    if (event.candidate) {
+      //send our ice candidates to other peer
+    }
+  };
+
+  peerConnection.onconnectionstatechange = (event) => {
+    if (peerConnection.connectionState === 'connected') {
+      console.log('succesfully connected with other peer');
+    }
+  };
+
+  // recieving tracks
+  const remoteStream = new MediaStream();
+  store.setRemoteStream(remoteStream);
+  ui.updateRemoteVideo(remoteStream);
+
+  peerConnection.ontrack = (event) => {
+    remoteStream.addTrack(event.track);
+  };
+
+  // add out stream to peer connection
+  if (
+    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE
+  ) {
+    const localStream = store.getState().localStream;
+
+    for (const track of localStream.getTracks()) {
+      peerConnection.addTrack(track, localStream);
+    }
+  }
 };
 
 /**
