@@ -5,6 +5,7 @@ import * as store from './store.js';
 
 let connectedUserDetails;
 let peerConnection;
+let dataChannel;
 
 const defaultConstraints = {
   audio: true,
@@ -40,6 +41,22 @@ export const getLocalPreview = () => {
 const createPeerConnection = () => {
   console.log('ui.createPerrConnection called');
   peerConnection = new RTCPeerConnection(configuration);
+
+  // create data channel for chat functionality
+  dataChannel = peerConnection.createDataChannel('chat');
+
+  // create a ondatachannel listener
+  peerConnection.ondatachannel = (event) => {
+    const dataChannel = event.channel;
+
+    dataChannel.onopen = () => {
+      console.log('peer connection is ready to recieve data channel messages');
+    };
+
+    dataChannel.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+    };
+  };
 
   peerConnection.onicecandidate = (event) => {
     console.log('getting ice candidates from stun server');
@@ -77,6 +94,11 @@ const createPeerConnection = () => {
       peerConnection.addTrack(track, localStream);
     }
   }
+};
+
+export const sendMessageUsingDataChannel = (message) => {
+  const stringifiedMessage = JSON.stringify(message);
+  dataChannel.send(stringifiedMessage);
 };
 
 /**
