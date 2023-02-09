@@ -46,11 +46,7 @@ personalCodeVideoButton.addEventListener('click', () => {
   webRTCHandler.sendPreOffer(callType, personalCode);
 });
 
-// event listeners for video call buttons
-
-/**
- * event listener for microphone button
- */
+//event listener for microphone button
 const micButton = document.getElementById('mic_button');
 console.log('micButton', micButton);
 
@@ -64,9 +60,7 @@ micButton.addEventListener('click', () => {
   ui.updateMicButton(micEnabled);
 });
 
-/**
- * event listener to toggle camera on/off
- */
+//event listener to toggle camera on/off
 const cameraButton = document.getElementById('camera_button');
 
 cameraButton.addEventListener('click', () => {
@@ -75,4 +69,12 @@ cameraButton.addEventListener('click', () => {
   const cameraEnabled = localStream.getVideoTracks()[0].enabled;
   localStream.getVideoTracks()[0].enabled = !cameraEnabled;
   ui.updateCameraButton(cameraEnabled);
+});
+
+// event listener for screen sharing button
+const screenSharingButton = document.getElementById('screen_sharing_button');
+
+screenSharingButton.addEventListener('click', () => {
+  const screenSharingActive = store.getState().screenSharingActive;
+  webRTCHandler.switchBetweenCameraAndScreenSharing(screenSharingActive);
 });

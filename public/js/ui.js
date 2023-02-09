@@ -1,5 +1,6 @@
 import * as constants from './constants.js';
 import * as elements from './elements.js';
+import { setScreenSharingActive } from './store.js';
 
 export const updatePersonalCode = (personalCode) => {
   const personalCodeParagraph = document.getElementById(
