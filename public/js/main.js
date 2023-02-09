@@ -2,6 +2,7 @@ import * as store from './store.js';
 import * as wss from './wss.js';
 import * as webRTCHandler from './webRTCHandler.js';
 import * as constants from './constants.js';
+import * as ui from './ui.js';
 
 // initialize socket
 const socket = io();
@@ -43,4 +44,35 @@ personalCodeVideoButton.addEventListener('click', () => {
   const callType = constants.callType.VIDEO_PERSONAL_CODE;
 
   webRTCHandler.sendPreOffer(callType, personalCode);
+});
+
+// event listeners for video call buttons
+
+/**
+ * event listener for microphone button
+ */
+const micButton = document.getElementById('mic_button');
+console.log('micButton', micButton);
+
+micButton.addEventListener('click', () => {
+  console.log('micButton eventlistener triggered');
+
+  const localStream = store.getState().localStream;
+  const micEnabled = localStream.getAudioTracks()[0].enabled;
+  localStream.getAudioTracks()[0].enabled = !micEnabled;
+
+  ui.updateMicButton(micEnabled);
+});
+
+/**
+ * event listener to toggle camera on/off
+ */
+const cameraButton = document.getElementById('camera_button');
+
+cameraButton.addEventListener('click', () => {
+  console.log('cameraButton evenListener triggered');
+  const localStream = store.getState().localStream;
+  const cameraEnabled = localStream.getVideoTracks()[0].enabled;
+  localStream.getVideoTracks()[0].enabled = !cameraEnabled;
+  ui.updateCameraButton(cameraEnabled);
 });

@@ -17,7 +17,7 @@ export const updateLocalVideo = (stream) => {
   });
 };
 
-// Update the source of remote_video to the stream. 
+// Update the source of remote_video to the stream.
 export const updateRemoteVideo = (stream) => {
   console.log('ui.updateRemoteVideo called');
   const remoteVideo = document.getElementById('remote_video');
@@ -127,6 +127,35 @@ export const showVideoCallElements = (callType) => {
   disableDashboard();
 };
 
+// call control functions
+
+/**
+ * function to change micButtonImage depending on status of the microphone
+ * @param {boolean} micEnabled - status of the microphone
+ */
+export const updateMicButton = (micEnabled) => {
+  console.log('ui.updateMicButton called');
+
+  const micONImgSrc = './utils/images/mic.png';
+  const micOffImgSrc = './utils/images/micOff.png';
+
+  const micButtonImage = document.getElementById('mic_button_image');
+  micButtonImage.src = micEnabled ? micOffImgSrc : micONImgSrc;
+};
+
+/**
+ * function to change cameraButtonImage depending on status of the camera
+ * @param {boolean} cameraEnabled - status of the camera
+ */
+export const updateCameraButton = (cameraEnabled) => {
+  const cameraOnImgSrc = './utils/images/camera.png';
+  const cameraOffImgSrc = './utils/images/cameraOff.png';
+
+  const cameraButtonImage = document.getElementById('camera_button_image');
+  cameraButtonImage.src = cameraEnabled ? cameraOffImgSrc : cameraOnImgSrc;
+};
+
+// ui helper functions
 const enableDashboard = () => {
   const dashboardBlocker = document.getElementById('dashboard_blur');
   if (!dashboardBlocker.classList.contains('display_none')) {
