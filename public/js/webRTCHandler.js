@@ -55,6 +55,7 @@ const createPeerConnection = () => {
 
     dataChannel.onmessage = (event) => {
       const message = JSON.parse(event.data);
+      console.log('message', message);
     };
   };
 

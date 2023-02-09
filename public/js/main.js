@@ -78,3 +78,24 @@ screenSharingButton.addEventListener('click', () => {
   const screenSharingActive = store.getState().screenSharingActive;
   webRTCHandler.switchBetweenCameraAndScreenSharing(screenSharingActive);
 });
+
+//event listener for messenger
+
+const newMessageInput = document.getElementById('new_message_input');
+newMessageInput.addEventListener('keydown', (event) => {
+  console.log('change occured');
+  const key = event.key;
+
+  if (key === 'Enter') {
+    webRTCHandler.sendMessageUsingDataChannel(event.target.value);
+    newMessageInput.value = '';
+  }
+});
+
+const sendMessage = document.getElementById('send_message_button');
+
+sendMessage.addEventListener('click', (event) => {
+  const message = newMessageInput.value;
+  webRTCHandler.sendMessageUsingDataChannel(newMessageInput.value);
+  newMessageInput.value = '';
+});
