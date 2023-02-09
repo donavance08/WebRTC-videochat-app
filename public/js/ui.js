@@ -17,8 +17,11 @@ export const updateLocalVideo = (stream) => {
   });
 };
 
+// Update the source of remote_video to the stream. 
 export const updateRemoteVideo = (stream) => {
   console.log('ui.updateRemoteVideo called');
+  const remoteVideo = document.getElementById('remote_video');
+  remoteVideo.srcObject = stream;
 };
 
 export const showIncomingCallDialog = (
@@ -108,7 +111,7 @@ export const showChatCallElements = (callType) => {
   disableDashboard();
 };
 
-export const showVideoCallElements = () => {
+export const showVideoCallElements = (callType) => {
   const callButtons = document.getElementById('call_buttons');
   showElement(callButtons);
 

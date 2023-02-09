@@ -23,11 +23,13 @@ const configuration = {
  * function to gain access to camera and microphone and preview it to the local_video container
  */
 export const getLocalPreview = () => {
+  console.log('webRTCHandler.getLocalPreview called');
   navigator.mediaDevices
     .getUserMedia(defaultConstraints)
     .then((stream) => {
       ui.updateLocalVideo(stream);
       store.setLocalStream(stream);
+      console.log('localStream', store.getState().localStream);
     })
     .catch((error) => {
       console.log('error occured whe trying to get access to camera');
@@ -36,6 +38,7 @@ export const getLocalPreview = () => {
 };
 
 const createPeerConnection = () => {
+  console.log('ui.createPerrConnection called');
   peerConnection = new RTCPeerConnection(configuration);
 
   peerConnection.onicecandidate = (event) => {
@@ -60,12 +63,11 @@ const createPeerConnection = () => {
     remoteStream.addTrack(event.track);
   };
 
-  // add out stream to peer connection
+  // add our stream to peer connection
   if (
     connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE
   ) {
     const localStream = store.getState().localStream;
-
     for (const track of localStream.getTracks()) {
       peerConnection.addTrack(track, localStream);
     }
@@ -116,6 +118,7 @@ const acceptCallHandler = () => {
   console.log('call accepted');
   createPeerConnection();
   sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
+  ui.showVideoCallElements(connectedUserDetails.callType);
 };
 const rejectCallHandler = () => {
   console.log('call rejected');
@@ -157,7 +160,7 @@ export const handlePreOfferAnswer = (data) => {
 
     case constants.preOfferAnswer.CALL_ACCEPTED:
       console.log('webRTCHandler: case CALL_ACCEPTED');
-      ui.showVideoCallElements();
+      ui.showVideoCallElements(connectedUserDetails.callType);
       createPeerConnection();
       sendWebRTCOffer();
   }
