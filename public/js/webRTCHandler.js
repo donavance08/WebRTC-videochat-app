@@ -176,7 +176,23 @@ const sendWebRTCOffer = async () => {
   });
 };
 
-export const handWebRTCOffer = (data) => {
-  console.log('webRTCHandler.webRTCOffer called');
-  console.log('data', data);
+// respond to the webRTCOffer
+export const handWebRTCOffer = async (data) => {
+  await peerConnection.setRemoteDescription(data.offer);
+
+  const answer = await peerConnection.createAnswer();
+  await peerConnection.setLocalDescription(answer);
+
+  wss.sendDataUsingWebRTCSignalling({
+    connectedUserSocketId: connectedUserDetails.socketId,
+    type: constants.webRTCSignalling.ANSWER,
+    answer: answer,
+  });
+};
+
+// function used by the caller once it recieves and answer
+export const handleWebRTCAnswer = async (data) => {
+  console.log('webRTCHandler.handleWebRTCAnswer called');
+
+  await peerConnection.setRemoteDescription(data.answer);
 };
