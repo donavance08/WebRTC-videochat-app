@@ -220,10 +220,32 @@ export const handleWebRTCCandidate = async (data) => {
  */
 
 let screenSharingStream;
+
 export const switchBetweenCameraAndScreenSharing = async (
   screenSharingActive
 ) => {
   if (screenSharingActive) {
+    const localStream = store.getState().localStream;
+
+    const senders = peerConnection.getSenders();
+
+    const sender = senders.find(
+      (sender) =>
+        sender.track.kind === screenSharingStream.getVideoTracks()[0].kind
+    );
+
+    if (sender) {
+      sender.replaceTrack(localStream.getVideoTracks()[0]);
+    }
+
+    // stop screen sharing stream
+    store
+      .getState()
+      .screenSharingStream.getTracks()
+      .forEach((track) => track.stop());
+
+    store.setScreenSharingActive(!screenSharingActive);
+    ui.updateLocalVideo(localStream);
   } else {
     console.log('switching from screen sharing ');
     try {
@@ -236,12 +258,13 @@ export const switchBetweenCameraAndScreenSharing = async (
       //replace track which sender is sending
       const senders = peerConnection.getSenders();
 
-      const sender = senders.find((sender) => {
-        sender.track.kind === screenSharingStream.getVideoTracks()[0].kind;
-      });
+      const sender = senders.find(
+        (sender) =>
+          sender.track.kind === screenSharingStream.getVideoTracks()[0].kind
+      );
 
       if (sender) {
-        sender.repalaceTrack(screenSharingStream.getVideoTracks()[0]);
+        sender.replaceTrack(screenSharingStream.getVideoTracks()[0]);
       }
 
       store.setScreenSharingActive(!screenSharingActive);
