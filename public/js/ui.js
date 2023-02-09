@@ -156,6 +156,47 @@ export const updateCameraButton = (cameraEnabled) => {
   cameraButtonImage.src = cameraEnabled ? cameraOffImgSrc : cameraOnImgSrc;
 };
 
+// ui messages
+export const appendMessage = (message, right = false) => {
+  const messagesContainer = document.getElementById('messages_container');
+  const messageElement = right
+    ? elements.getRightMessage(message)
+    : elements.getLeftMessage(message);
+
+  messagesContainer.appendChild(messageElement);
+};
+
+export const clearMessenger = () => {
+  const messagesContainer = document.getElementById('messages_container');
+  messagesContainer.querySelectorAll('*').forEach((n) => {
+    n.remove();
+  });
+};
+
+//recording
+
+export const showRecordingPanel = () => {
+  const recordingButtons = document.getElementById('video_recording_buttons');
+  showElement(recordingButtons);
+
+  // hide Start recording button if it is active
+  const startRecordingButton = document.getElementById(
+    'start_recording_button'
+  );
+
+  hideElement(startRecordingButton);
+};
+
+export const resetRecordingButtons = () => {
+  const startRecordingButton = document.getElementById(
+    'start_recording_button'
+  );
+  const recordingButtons = document.getElementById('video_recording_buttons');
+
+  showElement(startRecordingButton);
+  hideElement(recordingButtons);
+};
+
 // ui helper functions
 const enableDashboard = () => {
   const dashboardBlocker = document.getElementById('dashboard_blur');
