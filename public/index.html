@@ -7,7 +7,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <link rel="icon" href="./utils/images/logo.png" type="image/x-icon">
+    <link
+      rel="icon"
+      href="./utils/images/logo.png"
+      type="image/x-icon"
+    />
     <title>Meet the strangers</title>
     <link
       rel="stylesheet"
@@ -132,11 +136,12 @@
           >
             <img src="./utils/images/logo.png" />
           </div>
-          <div
+          <video
             class="remote_video display_none"
+            muted
             autoplay
             id="remote_video"
-          ></div>
+          ></video>
           <div class="local_video_container">
             <video
               muted
@@ -244,7 +249,6 @@
 
       <div id="dialog"></div>
     </div>
-
 
     <script src="/socket.io/socket.io.js"></script>
     <script
