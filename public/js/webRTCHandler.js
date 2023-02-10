@@ -94,6 +94,7 @@ const createPeerConnection = () => {
     connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE
   ) {
     const localStream = store.getState().localStream;
+    console.log('localStrea', localStream);
     for (const track of localStream.getTracks()) {
       peerConnection.addTrack(track, localStream);
     }
@@ -124,7 +125,7 @@ export const sendPreOffer = (callType, calleePersonalCode) => {
       calleePersonalCode,
     };
 
-    ui.showCallingDialog(callingDialogRejectCallHandler);
+    ui.showCallingDialog(rejectCallHandler);
     wss.sendPreOffer(data);
   }
 };
@@ -149,14 +150,12 @@ const acceptCallHandler = () => {
   console.log('call accepted');
   createPeerConnection();
   sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
-  ui.showVideoCallElements(connectedUserDetails.callType);
+  ui.showCallElements(connectedUserDetails.callType);
 };
 const rejectCallHandler = () => {
   console.log('call rejected');
   sendPreOfferAnswer(constants.preOfferAnswer.CALL_REJECTED);
 };
-
-const callingDialogRejectCallHandler = () => {};
 
 const sendPreOfferAnswer = (preOfferAnswer) => {
   const data = {
@@ -191,7 +190,7 @@ export const handlePreOfferAnswer = (data) => {
 
     case constants.preOfferAnswer.CALL_ACCEPTED:
       console.log('webRTCHandler: case CALL_ACCEPTED');
-      ui.showVideoCallElements(connectedUserDetails.callType);
+      ui.showCallElements(connectedUserDetails.callType);
       createPeerConnection();
       sendWebRTCOffer();
   }
@@ -303,17 +302,43 @@ export const switchBetweenCameraAndScreenSharing = async (
   }
 };
 
-// function to handle a call or chat hangup
+// function to handle a user initiated hang up
 export const handleHangUp = () => {
   console.log('initiate end call or chat');
   const data = {
     connectedUserSocketId: connectedUserDetails.socketId,
   };
+  console.log('data', data);
 
   wss.sendUserHangedUp(data);
+  closePeerConnectionAndResetState();
 };
 
 //function to handle a connected user hanging up
 export const handleConnectedUserHangedUp = () => {
-  console.log('connected peer hanged up');
+  closePeerConnectionAndResetState();
+};
+
+const closePeerConnectionAndResetState = () => {
+  if (peerConnection) {
+    peerConnection.close();
+    peerConnection = null;
+  }
+
+  // if active mic and camera
+  if (
+    connectedUserDetails.callType === constants.callType.VIDEO_PERSONAL_CODE ||
+    connectedUserDetails.callType === constants.callType.VIDEO_STRANGER
+  ) {
+    /**
+     * turn on audio and video tracks to make sure the next call can use these objects.
+     * the reason is that if on the previous call, the mic or video were somehow turned off, that will remain turned of on the next call unless
+     * set to enabled again here
+     **/
+    store.getState().localStream.getVideoTracks()[0].enabled = true;
+    store.getState().localStream.getAudioTracks()[0].enabled = true;
+
+    ui.updateUIAfterHangUp(connectedUserDetails.callType);
+    connectedUserDetails = null;
+  }
 };

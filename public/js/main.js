@@ -142,6 +142,7 @@ hangUpButton.addEventListener('click', () => {
 
 // event listener for hangin up chat
 const hangUpChatButton = document.getElementById('finish_chat_call_button');
-hangUpButton.addEventListener('click', () => {
+
+hangUpChatButton.addEventListener('click', () => {
   webRTCHandler.handleHangUp();
 });

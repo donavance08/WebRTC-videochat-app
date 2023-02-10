@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
   printConnectedSockets(connectedPeers);
 
   /* *
-   * Listen for pre-offer events comming from each client connected to this socket server and emit same event name to the destination socket if found.
+   * Listen for pre-offer events comming from each client connected to this socket server and notify the connected socket if it is online, or reply with an error if not.
    */
   socket.on('pre-offer', (data) => {
     console.log('server pre-offer listener triggered');
