@@ -49,7 +49,6 @@ personalCodeVideoButton.addEventListener('click', () => {
 
 //event listener for microphone button
 const micButton = document.getElementById('mic_button');
-console.log('micButton', micButton);
 
 micButton.addEventListener('click', () => {
   console.log('micButton eventlistener triggered');

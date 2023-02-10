@@ -234,7 +234,7 @@ export const updateUIAfterHangUp = (callType) => {
     const chatCallButtons = document.getElementById(
       'finish_chat_button_container'
     );
-    hideElement(chatCallButton);
+    hideElement(chatCallButtons);
   }
 
   const newMessageInput = document.getElementById('new_message');
