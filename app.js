@@ -65,8 +65,6 @@ io.on('connection', (socket) => {
     });
 
     if (connectedPeer) {
-      console.log('found in list');
-      console.log(callerSocketId);
       io.to(callerSocketId).emit('pre-offer-answer', data);
     }
   });
@@ -80,6 +78,18 @@ io.on('connection', (socket) => {
 
     if (connectedPeer) {
       io.to(connectedPeer).emit('webRTC-signalling', data);
+    }
+  });
+
+  socket.on('user-hanged-up', (data) => {
+    const { connectedUserSocketId } = data;
+
+    const connectedPeer = connectedPeers.find(
+      (peerSocketId) => peerSocketId === connectedUserSocketId
+    );
+
+    if (connectedPeer) {
+      io.to(connectedUserSocketId).emit('user-hanged-up');
     }
   });
 
