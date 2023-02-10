@@ -94,9 +94,9 @@ newMessageInput.addEventListener('keydown', (event) => {
   }
 });
 
-const sendMessage = document.getElementById('send_message_button');
+const sendMessageButton = document.getElementById('send_message_button');
 
-sendMessage.addEventListener('click', (event) => {
+sendMessageButton.addEventListener('click', (event) => {
   const message = newMessageInput.value;
   webRTCHandler.sendMessageUsingDataChannel(newMessageInput.value);
   ui.appendMessage(message, true);
@@ -116,4 +116,20 @@ const stopRecordingButton = document.getElementById('stop_recording_button');
 stopRecordingButton.addEventListener('click', () => {
   recordingUtils.stopRecording();
   ui.resetRecordingButtons();
+});
+
+// event listener for pause recording button
+const pauseRecordingButton = document.getElementById('pause_recording_button');
+pauseRecordingButton.addEventListener('click', () => {
+  recordingUtils.pauseRecording();
+  ui.switchRecordingButtons(true);
+});
+
+// event listener for resume recoding button
+const resumeRecordingButton = document.getElementById(
+  'resume_recording_button'
+);
+resumeRecordingButton.addEventListener('click', () => {
+  recordingUtils.resumeRecording();
+  ui.switchRecordingButtons();
 });

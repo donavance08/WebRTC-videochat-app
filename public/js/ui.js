@@ -197,6 +197,19 @@ export const resetRecordingButtons = () => {
   hideElement(recordingButtons);
 };
 
+export const switchRecordingButtons = (switchForResumeButton = false) => {
+  const resumeButton = document.getElementById('resume_recording_button');
+  const pauseButton = document.getElementById('pause_recording_button');
+
+  if (switchForResumeButton) {
+    hideElement(pauseButton);
+    showElement(resumeButton);
+  } else {
+    hideElement(resumeButton);
+    showElement(pauseButton);
+  }
+};
+
 // ui helper functions
 const enableDashboard = () => {
   const dashboardBlocker = document.getElementById('dashboard_blur');
