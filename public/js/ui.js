@@ -18,6 +18,16 @@ export const updateLocalVideo = (stream) => {
   });
 };
 
+export const showVideoCallButtons = () => {
+  const personalCodeVideoButton = document.getElementById(
+    'personal_code_video_button'
+  );
+  showElement(personalCodeVideoButton);
+  const strangerVideoButton = document.getElementById('stranger_video_button');
+
+  showElement(strangerVideoButton);
+};
+
 // Update the source of remote_video to the stream.
 export const updateRemoteVideo = (stream) => {
   console.log('ui.updateRemoteVideo called');
@@ -253,6 +263,7 @@ export const updateUIAfterHangUp = (callType) => {
 
   removeAllDialogs();
 };
+
 // ui helper functions
 const enableDashboard = () => {
   const dashboardBlocker = document.getElementById('dashboard_blur');
