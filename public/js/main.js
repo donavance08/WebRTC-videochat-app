@@ -6,11 +6,26 @@ import * as ui from './ui.js';
 import * as recordingUtils from './recordingUtils.js';
 import * as strangerUtils from './strangerUtils.js';
 
+const getTurnServerCredentials = async () => {
+  const responseData = await axios.get('/api/get-turn-credentials');
+  console.log(
+    'responseData.data.token.iceServers',
+    responseData.data.token.iceServers
+  );
+  webRTCHandler.setTURNServers(responseData.data.token.iceServers);
+};
 // initialize socket
 const socket = io();
 wss.registerSocketEvents(socket);
 
-webRTCHandler.getLocalPreview();
+getTurnServerCredentials()
+  .then(() => {
+    webRTCHandler.getLocalPreview();
+  })
+  .catch((error) => {
+    console.log('handling error');
+    console.log(error);
+  });
 
 // implement a copy button functionality
 const personalCodeCopyButton = document.getElementById(

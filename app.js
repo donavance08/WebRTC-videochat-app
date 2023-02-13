@@ -1,6 +1,8 @@
 const express = require('express');
 const http = require('http');
+const { reset } = require('nodemon');
 require('dotenv').config();
+const twilio = require('twilio');
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,6 +14,18 @@ app.use(express.static('./public'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
+});
+app.get('/api/get-turn-credentials', (req, res) => {
+
+  const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+
+  client.tokens
+    .create()
+    .then((token) => res.send({ token }))
+    .catch((error) => {
+      console.log(error);
+      res.send({ message: 'failed to fetch TURN credentials', error });
+    });
 });
 
 let connectedPeers = [];
