@@ -16,6 +16,8 @@ app.get('/', (req, res) => {
 });
 
 let connectedPeers = [];
+let connectedPeersStrangers = [];
+
 /* 
     Make socket listen for connection event and inform the user
     print the socket.id afterwards
@@ -97,9 +99,57 @@ io.on('connection', (socket) => {
     console.log(`User ${socket.id} disconnected from the server`);
 
     // delete disconnected socket from the connectedPeers array
-    connectedPeers.splice(connectedPeers.indexOf(socket.id), 1);
+    const indexOfPeers = connectedPeers.indexOf(socket.id);
+    if (indexOfPeers >= 0) {
+      connectedPeers.splice(indexOfPeers, 1);
+    }
+
+    // delete disconnected socket from the connectedPeersStrangers array
+    const indexOfStrangers = connectedPeersStrangers.indexOf(socket.id);
+    if (indexOfStrangers >= 0) {
+      connectedPeersStrangers.splice(index, 1);
+    }
 
     printConnectedSockets(connectedPeers);
+    printConnectedSockets(connectedPeersStrangers);
+  });
+
+  socket.on('stranger-connection-status', (data) => {
+    console.log(data);
+    const { status } = data;
+    if (status) {
+      connectedPeersStrangers.push(socket.id);
+    } else {
+      const indexOfStrangers = connectedPeersStrangers.indexOf(socket.id);
+      if (indexOfStrangers >= 0) {
+        connectedPeersStrangers.splice(indexOfStrangers, 1);
+      }
+    }
+
+    printConnectedSockets(connectedPeersStrangers);
+  });
+
+  socket.on('get-stranger-socket-id', () => {
+    let randomStrangerSocketId;
+
+    const filteredConnectedPeersStrangers = connectedPeersStrangers.filter(
+      (peerSocketId) => peerSocketId !== socket.id
+    );
+
+    if (filteredConnectedPeersStrangers.length > 0) {
+      randomStrangerSocketId =
+        filteredConnectedPeersStrangers[
+          Math.floor(Math.random() * filteredConnectedPeersStrangers.length)
+        ];
+    } else {
+      randomStrangerSocketId = null;
+    }
+
+    const data = {
+      randomStrangerSocketId,
+    };
+
+    io.to(socket.id).emit('stranger-socket-id', data);
   });
 });
 
