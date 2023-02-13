@@ -1,3 +1,5 @@
+'use strict';
+
 import * as wss from './wss.js';
 import * as constants from './constants.js';
 import * as ui from './ui.js';
@@ -59,7 +61,7 @@ const createPeerConnection = () => {
 
       wss.sendDataUsingWebRTCSignalling({
         connectedUserSocketId: connectedUserDetails.socketId,
-        type: constants.webRTCSignaling.ICE_CANDIDATE,
+        type: constants.webRTCSignalling.ICE_CANDIDATE,
         candidate: event.candidate,
       });
     }
@@ -117,14 +119,18 @@ export const sendPreOffer = (callType, calleePersonalCode) => {
     wss.sendPreOffer(data);
   }
 
+  console.log('callType ', callType);
+
   if (
     callType === constants.callType.CHAT_STRANGER ||
     callType === constants.callType.VIDEO_STRANGER
   ) {
+    console.log('correct callTYpe');
     const data = {
       callType,
       calleePersonalCode,
     };
+
     store.setCallState(constants.callState.CALL_UNAVAILABLE);
     wss.sendPreOffer(data);
   }
@@ -229,10 +235,13 @@ export const handlePreOfferAnswer = (data) => {
 
 const sendWebRTCOffer = async () => {
   const offer = await peerConnection.createOffer();
+
+  console.log('offer', offer);
+
   await peerConnection.setLocalDescription(offer);
   wss.sendDataUsingWebRTCSignalling({
     connectedUserSocketId: connectedUserDetails.socketId,
-    type: constants.webRTCSignaling.OFFER,
+    type: constants.webRTCSignalling.OFFER,
     offer: offer,
   });
 };
@@ -243,7 +252,7 @@ export const handleWebRTCOffer = async (data) => {
   await peerConnection.setLocalDescription(answer);
   wss.sendDataUsingWebRTCSignalling({
     connectedUserSocketId: connectedUserDetails.socketId,
-    type: constants.webRTCSignaling.ANSWER,
+    type: constants.webRTCSignalling.ANSWER,
     answer: answer,
   });
 };

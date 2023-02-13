@@ -107,7 +107,7 @@ io.on('connection', (socket) => {
     // delete disconnected socket from the connectedPeersStrangers array
     const indexOfStrangers = connectedPeersStrangers.indexOf(socket.id);
     if (indexOfStrangers >= 0) {
-      connectedPeersStrangers.splice(index, 1);
+      connectedPeersStrangers.splice(indexOfStrangers, 1);
     }
 
     printConnectedSockets(connectedPeers);

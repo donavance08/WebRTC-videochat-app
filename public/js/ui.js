@@ -71,6 +71,22 @@ export const removeAllDialogs = () => {
   dialog.querySelectorAll('*').forEach((dialog) => dialog.remove());
 };
 
+export const showNoStrangerAvailableDialog = () => {
+  const infoDialog = elements.getInfoDialog(
+    'No Stranger Available',
+    'Please try again later!'
+  );
+
+  if (infoDialog) {
+    const dialog = document.getElementById('dialog');
+    dialog.appendChild(infoDialog);
+
+    setTimeout(() => {
+      removeAllDialogs();
+    }, 4000);
+  }
+};
+
 /**
  *
  * @param {*} preOfferAnswer
@@ -114,11 +130,20 @@ export const showInfoDialog = (preOfferAnswer) => {
 };
 
 export const showCallElements = (callType) => {
-  if (callType === constants.callType.CHAT_PERSONAL_CODE) {
+  if (
+    callType === constants.callType.CHAT_PERSONAL_CODE ||
+    callType === constants.callType.CHAT_STRANGER
+  ) {
     showChatCallElements(callType);
     return;
   }
-  showVideoCallElements(callType);
+
+  if (
+    callType === constants.callType.VIDEO_PERSONAL_CODE ||
+    callType === constants.callType.VIDEO_STRANGER
+  ) {
+    showVideoCallElements(callType);
+  }
 };
 
 const showChatCallElements = (callType) => {

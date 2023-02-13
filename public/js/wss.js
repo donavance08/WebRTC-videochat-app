@@ -30,7 +30,7 @@ export const registerSocketEvents = (socket) => {
   socket.on('webRTC-signalling', (data) => {
     switch (data.type) {
       case constants.webRTCSignalling.OFFER:
-        webRTCHandler.handWebRTCOffer(data);
+        webRTCHandler.handleWebRTCOffer(data);
         break;
       case constants.webRTCSignalling.ANSWER:
         webRTCHandler.handleWebRTCAnswer(data);
