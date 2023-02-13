@@ -8,11 +8,11 @@ import * as store from './store.js';
 let connectedUserDetails;
 let peerConnection;
 let dataChannel;
-let turnServers  = []
+let turnServers = [];
 
 export const setTURNServers = (servers) => {
   turnServers = servers;
-}
+};
 const defaultConstraints = {
   audio: true,
   video: true,
@@ -42,10 +42,10 @@ export const getLocalPreview = () => {
 };
 
 const createPeerConnection = () => {
-  
-const configuration = {
-  iceServers: [...turnServers, {url: 'stun:stun.1und1.de:3478' }],
-};
+  const configuration = {
+    iceServers: [...turnServers, { url: 'stun:stun.1und1.de:3478' }],
+    iceTransportPolicy: 'relay',
+  };
 
   peerConnection = new RTCPeerConnection(configuration);
 

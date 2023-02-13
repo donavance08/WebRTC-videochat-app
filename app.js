@@ -15,8 +15,8 @@ app.use(express.static('./public'));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-app.get('/api/get-turn-credentials', (req, res) => {
 
+app.get('/api/get-turn-credentials', (req, res) => {
   const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
   client.tokens
