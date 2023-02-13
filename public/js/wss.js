@@ -7,23 +7,18 @@ import * as strangerUtils from './strangerUtils.js';
 let socketIO = null;
 
 export const registerSocketEvents = (socket) => {
-  console.log('calling registerSocketEvents function');
-  console.log('socket', socket);
   socketIO = socket;
 
   socket.on('connect', () => {
-    console.log('successfully connected to socket.io server');
     store.setSocketId(socket.id);
     ui.updatePersonalCode(socket.id);
   });
 
   socket.on('pre-offer', (data) => {
-    console.log('pre-offer-event triggered');
     webRTCHandler.handlePreOffer(data);
   });
 
   socket.on('pre-offer-answer', (data) => {
-    console.log('pre-offer-asnwer listener triggered');
     webRTCHandler.handlePreOfferAnswer(data);
   });
 

@@ -30,7 +30,6 @@ export const showVideoCallButtons = () => {
 
 // Update the source of remote_video to the stream.
 export const updateRemoteVideo = (stream) => {
-  console.log('ui.updateRemoteVideo called');
   const remoteVideo = document.getElementById('remote_video');
   remoteVideo.srcObject = stream;
 };
@@ -181,8 +180,6 @@ export const showVideoCallElements = (callType) => {
  * @param {boolean} micEnabled - status of the microphone
  */
 export const updateMicButton = (micEnabled) => {
-  console.log('ui.updateMicButton called');
-
   const micONImgSrc = './utils/images/mic.png';
   const micOffImgSrc = './utils/images/micOff.png';
 

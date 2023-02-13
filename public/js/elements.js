@@ -3,7 +3,6 @@ export const getIncomingDialog = (
   acceptCallHandler,
   rejectCallHandler
 ) => {
-  console.log('getting incoming call dialog');
   const dialog = document.createElement('div');
   dialog.classList.add('dialog_wrapper');
   const dialogContent = document.createElement('div');
@@ -138,7 +137,7 @@ export const getLeftMessage = (message) => {
   return messageContainer;
 };
 
-export const getRightMessage = (message)=> {
+export const getRightMessage = (message) => {
   const messageContainer = document.createElement('div');
   messageContainer.classList.add('message_right_container');
   const messageParagraph = document.createElement('p');
@@ -148,4 +147,4 @@ export const getRightMessage = (message)=> {
   messageContainer.appendChild(messageParagraph);
 
   return messageContainer;
-}
+};

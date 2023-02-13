@@ -1,7 +1,6 @@
 const express = require('express');
 const http = require('http');
 require('dotenv').config();
-const { printConnectedSockets } = require('./public/js/bin');
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,16 +22,12 @@ let connectedPeersStrangers = [];
     print the socket.id afterwards
 */
 io.on('connection', (socket) => {
-  console.log(`New socket detected ${socket.id}$`);
   connectedPeers.push(socket.id);
-
-  printConnectedSockets(connectedPeers);
 
   /* *
    * Listen for pre-offer events comming from each client connected to this socket server and notify the connected socket if it is online, or reply with an error if not.
    */
   socket.on('pre-offer', (data) => {
-    console.log('server pre-offer listener triggered');
     const { calleePersonalCode, callType } = data;
 
     const connectedPeer = connectedPeers.find((peerSocketId) => {
@@ -40,7 +35,6 @@ io.on('connection', (socket) => {
     });
 
     if (connectedPeer) {
-      console.log('found in list');
       data = {
         callerSocketId: socket.id,
         callType,
@@ -56,11 +50,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('pre-offer-answer', (data) => {
-    console.log('pre-offer-answer listener triggered');
-
     const { callerSocketId, preOfferAnswer } = data;
-
-    console.log(`response from callee is ${preOfferAnswer}`);
 
     const connectedPeer = connectedPeers.find((peerSocketId) => {
       return peerSocketId === callerSocketId;
@@ -96,8 +86,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`User ${socket.id} disconnected from the server`);
-
     // delete disconnected socket from the connectedPeers array
     const indexOfPeers = connectedPeers.indexOf(socket.id);
     if (indexOfPeers >= 0) {
@@ -109,13 +97,9 @@ io.on('connection', (socket) => {
     if (indexOfStrangers >= 0) {
       connectedPeersStrangers.splice(indexOfStrangers, 1);
     }
-
-    printConnectedSockets(connectedPeers);
-    printConnectedSockets(connectedPeersStrangers);
   });
 
   socket.on('stranger-connection-status', (data) => {
-    console.log(data);
     const { status } = data;
     if (status) {
       connectedPeersStrangers.push(socket.id);
@@ -125,8 +109,6 @@ io.on('connection', (socket) => {
         connectedPeersStrangers.splice(indexOfStrangers, 1);
       }
     }
-
-    printConnectedSockets(connectedPeersStrangers);
   });
 
   socket.on('get-stranger-socket-id', () => {

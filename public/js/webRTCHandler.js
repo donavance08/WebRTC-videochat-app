@@ -119,13 +119,10 @@ export const sendPreOffer = (callType, calleePersonalCode) => {
     wss.sendPreOffer(data);
   }
 
-  console.log('callType ', callType);
-
   if (
     callType === constants.callType.CHAT_STRANGER ||
     callType === constants.callType.VIDEO_STRANGER
   ) {
-    console.log('correct callTYpe');
     const data = {
       callType,
       calleePersonalCode,
@@ -235,8 +232,6 @@ export const handlePreOfferAnswer = (data) => {
 
 const sendWebRTCOffer = async () => {
   const offer = await peerConnection.createOffer();
-
-  console.log('offer', offer);
 
   await peerConnection.setLocalDescription(offer);
   wss.sendDataUsingWebRTCSignalling({

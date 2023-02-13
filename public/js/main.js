@@ -29,7 +29,6 @@ const personalCodeChatButton = document.getElementById(
 );
 
 personalCodeChatButton.addEventListener('click', () => {
-  console.log('chat button clicked');
   const personalCode = document.getElementById('personal_code_input').value;
   const callType = constants.callType.CHAT_PERSONAL_CODE;
 
@@ -41,7 +40,6 @@ const personalCodeVideoButton = document.getElementById(
 );
 
 personalCodeVideoButton.addEventListener('click', () => {
-  console.log('video button clicked');
   const personalCode = document.getElementById('personal_code_input').value;
   const callType = constants.callType.VIDEO_PERSONAL_CODE;
 
@@ -52,8 +50,6 @@ personalCodeVideoButton.addEventListener('click', () => {
 const micButton = document.getElementById('mic_button');
 
 micButton.addEventListener('click', () => {
-  console.log('micButton eventlistener triggered');
-
   const localStream = store.getState().localStream;
   const micEnabled = localStream.getAudioTracks()[0].enabled;
   localStream.getAudioTracks()[0].enabled = !micEnabled;
@@ -65,7 +61,6 @@ micButton.addEventListener('click', () => {
 const cameraButton = document.getElementById('camera_button');
 
 cameraButton.addEventListener('click', () => {
-  console.log('cameraButton evenListener triggered');
   const localStream = store.getState().localStream;
   const cameraEnabled = localStream.getVideoTracks()[0].enabled;
   localStream.getVideoTracks()[0].enabled = !cameraEnabled;
@@ -84,7 +79,6 @@ screenSharingButton.addEventListener('click', () => {
 
 const newMessageInput = document.getElementById('new_message_input');
 newMessageInput.addEventListener('keydown', (event) => {
-  console.log('change occured');
   const key = event.key;
 
   if (key === 'Enter') {
